@@ -1,0 +1,171 @@
+{% extends 'base1.html' %}
+{% block content %}
+    <div class="form-group row">
+        <div class="col-mb-10">
+<div style="
+  outline: solid 1px black;
+  display: flex;
+  justify-content: center;" xmlns="http://www.w3.org/1999/html">
+<div style="justify-content: center;display: flex;border-style: solid;outline: solid 1px black;width:950px;height:auto; margin: auto;
+  padding: 10px;">
+
+    <form method="post" action="{% url 'credentials:details_form' %}" enctype="multipart/form-data" class="form-horizontal " id="dataform" style="padding-top:10px;" onsubmit="return submitForm(this);">
+    {% csrf_token %}
+        <div style="text-align:center;margin-top:25px;margin-bottom:25px;">
+            <h1 style="font-family:Times New Roman;font-size:30px;">Please fill this form for further process</h1>
+        </div>
+  <div class="mb-12" style="padding-top:15px;padding-bottom:15px;">
+    <label for="name" class="form-label">Name:</label>
+    <input type="text" class="form-control" id="name" name="name" required>
+  </div>
+  <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label for="dob" class="form-label">Date of Birth:</label>
+    <input type="date" class="form-control" id="dob" name="date_of_birth">
+    <div  class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+     <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label for="age" class="form-label">Age:</label>
+    <input name="age" type="number" class="form-control" id="age" aria-describedby="emailHelp">
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label for="phonenumber" class="form-label">Phone Number:</label>
+    <input name="phone_number" type="phonenumber" class="form-control" id="phonenumber">
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label for="mailid" class="form-label">Mail Id:</label>
+    <input name="mail_id" type="email" class="form-control" id="mailid">
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label for="address" class="form-label">Address:</label>
+      <textarea name="address" rows="4" cols="50" class="form-control" id="address" aria-describedby="emailHelp"></textarea>
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+           <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+            <label for="district" class="form-label">District:</label>
+            <select id="district" onchange="populateStates()" name="district" >
+                <option value="" selected disabled>--select a country--</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="kozhikode">kozhikode</option>
+                <option value="kozhikode">Malapuram</option>
+                <option value="kozhikode">Ernakulam</option>
+                <option value="kozhikode">Kottayam</option>
+                <option value="kozhikode">Kollam</option>
+
+            </select>
+    <div class="form-text">We'll never share your email with anyone else.</div>
+           <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+            <label for="branch" class="form-label">Branch:</label>
+            <select id="branch" onchange="populateCities()" name="branch">
+                <option value="" selected disabled>--select a state</option>
+            </select>
+    <div class="form-text">We'll never share your email with anyone else.</div>
+           </div>
+             <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+            <label for="acntype" class="form-label">Account Type:</label>
+                 <select id="acntype" name="account_type">
+                     <option value="" selected disabled>--select a city--</option>
+                     {% for t in typ %}
+                        <option value="{{t.id}}">{{t}}</option>
+                     {% endfor %}
+                 </select>
+
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3" style="padding-top:15px;padding-bottom:15px;">
+    <label class="form-label" >Choices:</label>&nbsp&nbsp
+      {% for option in options %}
+    <input type="checkbox" class="form-check-input" value="{{option.id}}" id="{{option.id}}" name="option">
+    <label for="{{option.id}}" class="form-label" >{{option.name}}</label>&nbsp&nbsp
+      {% endfor %}
+
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+       </div>
+<div >
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_district").change(function () {
+        const url = $("#dataform").attr("data-cities-url");  // get the url of the `load_cities` view
+        const districtId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'district_id': districtId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_branch").html(data);  // replace the contents of the city input with the data that came from the server
+
+
+<!--                let html_data = '<option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>';-->
+<!--                data.forEach(function (city) {-->
+<!--                    html_data += `<option value="${city.id}">${city.name}</option>`-->
+<!--                });-->
+<!--                console.log(html_data);-->
+<!--                $("#id_city").html(html_data);-->
+
+
+            }
+        });
+
+    });
+</script>
+<script>
+    var branch = {
+        Thrissur:["Chalakudy","Kundhakulam","Kodungallur","Kunnakulam",],
+        Kozhikode:["Vadakara","Koyilandy","Ramanattukara","Payyoli",],
+        Malapuram:["Manjeri","Thirur",Kondotty",Karippur",],
+        Ernakulam:["Aluva","Angamaly","Kochi","Muvattupuzha"],
+        Kottayam:["Vaikom","Kaduthuruthy","Pampady","Ettumanoor",],
+        Kollam:["Karunagappally","Kunnathur","Kottarakara",Punalur",]
+
+        };
+        var districtSelect = document.getElementById("district");
+        var branchSelect = document.getElementById("branch");
+
+        function populateStates(){
+                 branchSelect.innerHTML='<option value="">Select A Branch</option>';
+        var selecteddistrict = districtSelect.value;
+        if(selecteddistrict){
+            var selectedbranches = branch[selecteddistrict];
+                selectedbranches.forEach(function(branch){
+            var option = document.createElement("option");
+            option.value = branch;
+            option.text = branch;
+            branchSelect.appendChild(option);
+            });
+        }
+    }
+    </script>
+
+</form>
+    <script>
+        function submitForm(form){
+        swal({
+            title:"submitted success fully",
+        text:"this form will be submitted",
+        icon :"waring",
+        button :true,
+        dangermode:true,})
+        .then((isOkay)=>{
+        if(isOkay){
+        form.submit();
+        }
+        });
+        return false;
+        }
+    </script>
+</div>
+</div>
+
+</div>
+</div>
+<!-- Include JavaScript to display popup message -->
+{% endblock %}
